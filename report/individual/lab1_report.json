@@ -1,0 +1,167 @@
+{
+ "seed": 5586,
+ "predictions": {
+  "ml_f1": {
+   "text": "0.88",
+   "time": "16:12:06"
+  },
+  "ml_lr": {
+   "text": "0.001_50",
+   "time": "16:12:16"
+  },
+  "dl_curve": {
+   "text": " MLP sẽ giảm nhanh trong những epoch đầu, sau đó giảm chậm dần và ổn định khi mô hình học được các đặc trưng của spam. Training loss có thể tiếp tục giảm, trong khi validation loss có thể tăng trở lại nếu mô hình bị overfitting (học thuộc dữ liệu train thay vì tổng quát hóa).",
+   "time": "16:12:51"
+  },
+  "dl_relu": {
+   "text": "Nếu bỏ `nn.ReLU()`, hai lớp Linear liên tiếp sẽ tương đương với **một lớp Linear duy nhất**, tức là Logistic Regression khi dùng sigmoid để dự đoán xác suất spam. Vì không có hàm kích hoạt phi tuyến, mạng không thể học các mối quan hệ phi tuyến phức tạp giữa các từ. Em dự đoán F1 sẽ gần tương đương Logistic Regression, có thể giảm nhẹ so với MLP có ReLU.",
+   "time": "16:12:58"
+  },
+  "emb_search": {
+   "text": "ham",
+   "time": "16:15:14"
+  },
+  "emb_tricky": {
+   "text": "Encoder + LogReg",
+   "time": "16:16:45"
+  },
+  "llm_models": {
+   "text": "gpt-6.1-terra",
+   "time": "16:16:48"
+  },
+  "llm_fewshot": {
+   "text": "2",
+   "time": "16:16:48"
+  },
+  "tradeoff": {
+   "text": "0.5",
+   "time": "16:16:48"
+  },
+  "hard_eval": {
+   "text": "BoW + LogReg: khoảng 55–65%.BoW + MLP: khoảng 65–75%.Encoder + kNN: khoảng 65–75%.Encoder + LogReg: khoảng 75–85%.Encoder + MLP head: khoảng 70–80%.LLM: khoảng 80–90%.",
+   "time": "16:16:49"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": false,
+  "4.1 + 4.4 call_openai / llm_classify_batch": false,
+  "tính tay: baseline_accuracy": true,
+  "tính tay: sigmoid_0": true,
+  "tính tay: f1_example": true,
+  "tính tay: cosine_example": true,
+  "tính tay: llm_cost_per_day": true
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "16:12:06"
+  },
+  {
+   "key": "ml_lr",
+   "time": "16:12:16"
+  },
+  {
+   "key": "dl_curve",
+   "time": "16:12:51"
+  },
+  {
+   "key": "dl_relu",
+   "time": "16:12:58"
+  },
+  {
+   "key": "emb_search",
+   "time": "16:15:14"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "16:16:45"
+  },
+  {
+   "key": "llm_models",
+   "time": "16:16:48"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "16:16:48"
+  },
+  {
+   "key": "tradeoff",
+   "time": "16:16:48"
+  },
+  {
+   "key": "hard_eval",
+   "time": "16:16:49"
+  }
+ ],
+ "challenge": 0,
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9806451612903225,
+   "precision": 1.0,
+   "recall": 0.845360824742268,
+   "f1": 0.9162011173184357,
+   "f1_SUB": 0.787878787878788,
+   "train_s": 9.389253279999139,
+   "msg_per_s": 18290.837149597643,
+   "p50_ms": 0.05865200046173413,
+   "p95_ms": 0.12720665008600912,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.9935483870967742,
+   "precision": 1.0,
+   "recall": 0.9484536082474226,
+   "f1": 0.9735449735449735,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 7.482384520999403,
+   "msg_per_s": 37290.3476516155,
+   "p50_ms": 0.29201650022514514,
+   "p95_ms": 0.335547699842209,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9780645161290322,
+   "precision": 0.8773584905660378,
+   "recall": 0.9587628865979382,
+   "f1": 0.916256157635468,
+   "f1_SUB": 0.9500000000000001,
+   "train_s": 78.6259889210005,
+   "msg_per_s": 19.592580411034845,
+   "p50_ms": 39.65327649984829,
+   "p95_ms": 53.54631885038543,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9896774193548387,
+   "precision": 0.9405940594059405,
+   "recall": 0.979381443298969,
+   "f1": 0.9595959595959594,
+   "f1_SUB": 1.0,
+   "train_s": 79.0577858810002,
+   "msg_per_s": 35.339169865145,
+   "p50_ms": 24.510418000318168,
+   "p95_ms": 35.74280725051721,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.984516129032258,
+   "precision": 0.9207920792079208,
+   "recall": 0.9587628865979382,
+   "f1": 0.9393939393939394,
+   "f1_SUB": 0.9500000000000001,
+   "train_s": 79.53160521000063,
+   "msg_per_s": 36.017181865088624,
+   "p50_ms": 83.97542950024217,
+   "p95_ms": 160.77232310021816,
+   "usd_per_1k": 0.0
+  }
+ }
+}
